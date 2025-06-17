@@ -31,8 +31,10 @@ int main(){
 
 void queue::pushData(){}
 
-void queue::removeData(){}
-
 void queue::popData(){}
 
+void queue::removeData(){}
+
 void queue::show(){}
+
+void initAntrian(){}

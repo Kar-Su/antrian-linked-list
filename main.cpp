@@ -15,7 +15,7 @@ struct LinkedList{
 
 namespace queue{
   LinkedList *head = nullptr;
-  void insertData();
+  void insertData(LinkedList* head, int key, std::string name, int phoneNum, std::string desc);
   void removeData();
   void popData();
   void pushData();
@@ -50,6 +50,31 @@ void queue::show(LinkedList* head){
         std::cout << "Waktu Antri: " << ctime(&current->time) << std::endl;
         current = current->next;
     }
+}
+
+void queue::insertData(LinkedList* head, int position, std::string name, int phoneNum, std::string desc) {
+    time_t currentTimeStamp;
+    LinkedList* baru = new LinkedList();
+
+    baru->name = name;
+    baru->desc = desc;
+    baru->phoneNum = phoneNum;
+    baru->time = time(&currentTimeStamp);
+    baru->next = nullptr;
+
+    LinkedList* current = head;
+
+    for (int i = 1; i < position - 1 && current != nullptr; i++)
+    {
+      current = current->next;
+    }
+
+    if (current == nullptr) {
+      delete baru;
+    }
+
+    baru->next = current->next;
+    current->next = baru;
 }
 
 void initAntrian(){}

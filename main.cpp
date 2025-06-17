@@ -21,7 +21,7 @@ namespace queue{
   void pushData();
   void front();
   void back();
-  void show();
+  void show(LinkedList* head);
 }
 
 int main(){
@@ -35,6 +35,21 @@ void queue::popData(){}
 
 void queue::removeData(){}
 
-void queue::show(){}
+void queue::show(LinkedList* head){
+    if (head == nullptr) {
+        std::cout << "Data kosong" << std::endl;
+        return;
+    }
+
+    LinkedList* current = head;
+    while (current != nullptr)
+    {
+        std::cout << "nama: " << current->name << std::endl;
+        std::cout << "No Telepon: " << current->phoneNum << std::endl;
+        std::cout << "Deskripsi: " << current->desc << std::endl;
+        std::cout << "Waktu Antri: " << ctime(&current->time) << std::endl;
+        current = current->next;
+    }
+}
 
 void initAntrian(){}

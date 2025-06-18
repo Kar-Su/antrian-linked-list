@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include<string.h>
 #include<ctime>
+#include<cstdlib>
 
 struct Node{
   int id;
@@ -33,13 +34,14 @@ struct Queue{
   }
 
   void _checkNull();
-  void insertData(int key, std::string name, int phoneNum, std::string desc);
-  void removeData();
-  void popData();
-  void pushData(std::string name, int phoneNum, std::string desc);
+  void _insert(size_t index, std::string name, int phoneNum, std::string desc);
+  void remove();
+  void pop();
+  void push(std::string name, int phoneNum, std::string desc);
   void front();
   void back();
   void show();
+  size_t size();
 
 };
 
@@ -50,12 +52,21 @@ int main(){
 
 void Queue::_checkNull(){
   if(head == nullptr){
-    throw std::logic_error("Error: Data Kosong");
+    std::cerr << "Error: Require data not satisfied, abort program instead." << std::endl;
+    exit(EXIT_FAILURE);
   }
 }
 
-void Queue::pushData(std::string name, int phoneNum, std::string desc){
+void Queue::push(std::string name, int phoneNum, std::string desc){
   Node *newNode = new Node();
+  time_t currentTimeStamp;
+
+  newNode->name = name;
+  newNode->phoneNum = phoneNum;
+  newNode->desc = desc;
+  newNode->time = time(&currentTimeStamp);
+
+
   if(head == nullptr){
     head = newNode;
     return;
@@ -68,11 +79,17 @@ void Queue::pushData(std::string name, int phoneNum, std::string desc){
   tmp -> next = newNode;
 }
 
-void Queue::popData(){}
+void Queue::pop(){
+  _checkNull();
+  Node *tmp = head -> next;
+  delete head;
+  head = tmp;
+}
 
-void Queue::removeData(){}
+void Queue::remove(){}
 
 void Queue::show(){
+    _checkNull();
     Node* current = head;
     while (current != nullptr)
     {
@@ -84,7 +101,8 @@ void Queue::show(){
     }
 }
 
-void Queue::insertData(int position, std::string name, int phoneNum, std::string desc) {
+void Queue::_insert(size_t index, std::string name, int phoneNum, std::string desc) {
+    std::cerr << "Warning: Insert bukan merupakan fungsi murni dari Queue" << std::endl; 
     time_t currentTimeStamp;
     Node* newNode = new Node();
 
@@ -95,7 +113,7 @@ void Queue::insertData(int position, std::string name, int phoneNum, std::string
 
     Node* current = head;
 
-    for (int i = 1; i < position - 1 && current != nullptr; i++)
+    for (size_t i = 0; i < index && current != nullptr; i++)
     {
       current = current->next;
     }

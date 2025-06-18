@@ -1,47 +1,79 @@
 #include<iostream>
+#include <stdexcept>
 #include<string.h>
 #include<ctime>
 
-struct LinkedList{
+struct Node{
   int id;
   std::string name;
   int phoneNum;
   std::string desc;
-  LinkedList *next;
   std::time_t time;
+  Node *next;
 
-  LinkedList(): next(nullptr), time(std::time(NULL)){};
+  Node(): next(nullptr), time(std::time(NULL)){};
 };
 
-namespace queue{
-  LinkedList *head = nullptr;
-  void insertData(LinkedList* head, int key, std::string name, int phoneNum, std::string desc);
+struct Queue{
+  Node *head;
+  Node *tail;
+
+  Queue(): head(nullptr), tail(nullptr){};
+  ~Queue(){
+    Node *current = head;
+    Node *nextNode = nullptr;
+
+    while(head != nullptr){
+      nextNode = current -> next;
+      delete current;
+      current = nextNode;
+    }
+    head = nullptr;
+    tail = nullptr;
+  }
+
+  void _checkNull();
+  void insertData(int key, std::string name, int phoneNum, std::string desc);
   void removeData();
   void popData();
-  void pushData();
+  void pushData(std::string name, int phoneNum, std::string desc);
   void front();
   void back();
-  void show(LinkedList* head);
-}
+  void show();
+
+};
 
 int main(){
 
   return 0;
 }
 
-void queue::pushData(){}
+void Queue::_checkNull(){
+  if(head == nullptr){
+    throw std::logic_error("Error: Data Kosong");
+  }
+}
 
-void queue::popData(){}
+void Queue::pushData(std::string name, int phoneNum, std::string desc){
+  Node *newNode = new Node();
+  if(head == nullptr){
+    head = newNode;
+    return;
+  }
+  
+  Node *tmp = head;
+  while(tmp -> next != nullptr){
+    tmp = tmp -> next;
+  }
+  tmp -> next = newNode;
+}
 
-void queue::removeData(){}
+void Queue::popData(){}
 
-void queue::show(LinkedList* head){
-    if (head == nullptr) {
-        std::cout << "Data kosong" << std::endl;
-        return;
-    }
+void Queue::removeData(){}
 
-    LinkedList* current = head;
+void Queue::show(){
+    Node* current = head;
     while (current != nullptr)
     {
         std::cout << "nama: " << current->name << std::endl;
@@ -52,17 +84,16 @@ void queue::show(LinkedList* head){
     }
 }
 
-void queue::insertData(LinkedList* head, int position, std::string name, int phoneNum, std::string desc) {
+void Queue::insertData(int position, std::string name, int phoneNum, std::string desc) {
     time_t currentTimeStamp;
-    LinkedList* baru = new LinkedList();
+    Node* newNode = new Node();
 
-    baru->name = name;
-    baru->desc = desc;
-    baru->phoneNum = phoneNum;
-    baru->time = time(&currentTimeStamp);
-    baru->next = nullptr;
+    newNode->name = name;
+    newNode->desc = desc;
+    newNode->phoneNum = phoneNum;
+    newNode->time = time(&currentTimeStamp);
 
-    LinkedList* current = head;
+    Node* current = head;
 
     for (int i = 1; i < position - 1 && current != nullptr; i++)
     {
@@ -70,11 +101,11 @@ void queue::insertData(LinkedList* head, int position, std::string name, int pho
     }
 
     if (current == nullptr) {
-      delete baru;
+      delete newNode;
     }
 
-    baru->next = current->next;
-    current->next = baru;
+    newNode->next = current->next;
+    current->next = newNode;
 }
 
 void initAntrian(){}

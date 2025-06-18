@@ -1,5 +1,4 @@
 #include<iostream>
-#include <stdexcept>
 #include<string.h>
 #include<ctime>
 #include<cstdlib>
@@ -48,6 +47,16 @@ struct Queue{
 int main(){
 
   return 0;
+}
+
+size_t Queue::size(){
+  size_t i = 0;
+  Node *current = head;
+  while(head != nullptr){
+    ++i;
+    current = current -> next;
+  }
+  return i;
 }
 
 void Queue::_checkNull(){
@@ -102,7 +111,12 @@ void Queue::show(){
 }
 
 void Queue::_insert(size_t index, std::string name, int phoneNum, std::string desc) {
-    std::cerr << "Warning: Insert bukan merupakan fungsi murni dari Queue" << std::endl; 
+    std::cerr << "Warning: Insert bukan merupakan fungsi murni dari Queue" << std::endl;
+
+    if(index >= size() - 1){
+      std::cerr << "Error: Unexpected Behavior, Use push instead!";
+      exit(EXIT_FAILURE);
+    }
     time_t currentTimeStamp;
     Node* newNode = new Node();
 
@@ -113,13 +127,9 @@ void Queue::_insert(size_t index, std::string name, int phoneNum, std::string de
 
     Node* current = head;
 
-    for (size_t i = 0; i < index && current != nullptr; i++)
+    for(size_t i = 0; i < index && current != nullptr; i++)
     {
       current = current->next;
-    }
-
-    if (current == nullptr) {
-      delete newNode;
     }
 
     newNode->next = current->next;

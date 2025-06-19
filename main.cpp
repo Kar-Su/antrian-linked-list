@@ -2,6 +2,7 @@
 #include<string.h>
 #include<ctime>
 #include<cstdlib>
+using namespace std;
 
 // Struct data
 struct Node{
@@ -49,7 +50,57 @@ struct Queue{
 
 int main(){
   Queue test;
-  test.show();
+  int pilihan;
+  do {
+    std::cout << "\n=== MENU QUEUE LINKED LIST ===\n";
+    std::cout << "1. Tambah Data (Push)\n";
+    std::cout << "2. Hapus Data Pertama (Pop)\n";
+    std::cout << "3. Tampilkan Semua Data\n";
+    std::cout << "4. Hitung Jumlah Data\n";
+    std::cout << "5. Hapus Data pada Index (Remove)\n";
+    std::cout << "6. Insert Data pada Index\n";
+    std::cout << "0. Keluar\n";
+    std::cout << "\n==============================\n";
+    std::cout << "Pilih menu: ";
+    std::cin >> pilihan;
+    std::cin.ignore(); // flush newline
+
+    if (pilihan == 1) {
+      std::string nama, desc;
+      int telp;
+      std::cout << "Nama: "; std::getline(std::cin, nama);
+      std::cout << "No Telepon: "; std::cin >> telp; std::cin.ignore();
+      std::cout << "Deskripsi: "; std::getline(std::cin, desc);
+      test.push(nama, telp, desc);
+      std::cout << "Data berhasil ditambahkan!\n";
+    } else if (pilihan == 2) {
+      test.pop();
+      std::cout << "Data pertama dihapus!\n";
+    } else if (pilihan == 3) {
+      test.show();
+    } else if (pilihan == 4) {
+      std::cout << "Jumlah data: " << test.size() << std::endl;
+    } else if (pilihan == 5) {
+      size_t idx;
+      std::cout << "Masukkan index yang ingin dihapus (mulai dari 1): ";
+      std::cin >> idx; std::cin.ignore();
+      test._remove(idx-1);
+    } else if (pilihan == 6) {
+      size_t idx;
+      std::string nama, desc;
+      int telp;
+      std::cout << "Masukkan index untuk insert (mulai dari 1): ";
+      std::cin >> idx; std::cin.ignore();
+      std::cout << "Nama: "; std::getline(std::cin, nama);
+      std::cout << "No Telepon: "; std::cin >> telp; std::cin.ignore();
+      std::cout << "Deskripsi: "; std::getline(std::cin, desc);
+      test._insert(idx-1, nama, telp, desc);
+    } else if (pilihan == 0) {
+      std::cout << "Keluar program.\n";
+    } else {
+      std::cout << "Pilihan tidak valid!\n";
+    }
+  } while (pilihan != 0);
   return 0;
 }
 

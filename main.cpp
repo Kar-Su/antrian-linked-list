@@ -20,15 +20,11 @@ struct Queue{
 
   Queue(): head(nullptr), tail(nullptr){};
   ~Queue(){
-    Node *current = head;
-    Node *nextNode = nullptr;
-
     while(head != nullptr){
-      nextNode = current -> next;
-      delete current;
-      current = nextNode;
+      Node *tmp = head;
+      head = head->next;
+      delete tmp;
     }
-    head = nullptr;
     tail = nullptr;
   }
 
@@ -112,11 +108,12 @@ void Queue::show(){
 
 void Queue::_insert(size_t index, std::string name, int phoneNum, std::string desc) {
     std::cerr << "Warning: Insert bukan merupakan fungsi murni dari Queue" << std::endl;
-
-    if(index >= size() - 1){
-      std::cerr << "Error: Unexpected Behavior, Use push instead!";
+    const size_t SIZE = size();
+    if(index >= SIZE - 1 || SIZE == 0){
+      std::cerr << "Error: Unexpected Behavior, Use push instead!" << std::endl;
       exit(EXIT_FAILURE);
     }
+
     time_t currentTimeStamp;
     Node* newNode = new Node();
 

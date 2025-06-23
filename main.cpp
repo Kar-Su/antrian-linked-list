@@ -1,16 +1,21 @@
 #include <iostream>
 #include <string>
 #include <ctime>
-#include <cstdlib>
 #include <map>
-#include <conio.h>
+#include "custom.hpp"
 
-using namespace std;
 
 enum Status { PENDING, PROSES, SELESAI };
+std::map<Status, std::string> statusMap{
+{PENDING, "Pending"},
+{PROSES, "Proses"},
+{SELESAI, "Selesai"},
+};
+
 
 // Struct data
 struct Node{
+
     int id;
     std::string name;
     int phoneNum;
@@ -63,12 +68,13 @@ int main(){
     do
     {
         test.showmMenu();
-        pilihan = getch();
+        std::cin >> pilihan;
+        std::cin.ignore();
         switch (pilihan)
         {
         case '1':
             {
-            system("cls");
+            clearScreen();
             std::string nama, desc;
             int telp;
             std::cout << "Nama: "; std::getline(std::cin, nama);
@@ -81,7 +87,7 @@ int main(){
             break;
         case '2':
             {
-            system("cls");
+            clearScreen();
             test.pop();
             std::cout << "Data pertama dihapus!\n";
             getch();
@@ -89,31 +95,31 @@ int main(){
             break;
         case '3':
             {
-            system("cls");
+            clearScreen();
             test.show();
             getch();
             }
             break;
         case '4':
             {
-            system("cls");
+            clearScreen();
             std::cout << "Jumlah data: " << test.size() << std::endl;
             getch();
             }
             break;
         case '5':
             {
-            system("cls");
+            clearScreen();
             size_t idx;
             std::cout << "Masukkan index yang ingin dihapus (mulai dari 1): ";
             std::cin >> idx; std::cin.ignore();
-            test._remove(idx-1);
+            test._remove(idx);
             getch();
             }
             break;
         case '6':
             {
-            system("cls");
+            clearScreen();
             size_t idx;
             std::string nama, desc;
             int telp;
@@ -122,13 +128,13 @@ int main(){
             std::cout << "Nama: "; std::getline(std::cin, nama);
             std::cout << "No Telepon: "; std::cin >> telp; std::cin.ignore();
             std::cout << "Deskripsi: "; std::getline(std::cin, desc);
-            test._insert(idx-1, nama, telp, desc);
+            test._insert(idx, nama, telp, desc);
             getch();
             }
             break;
         case '7':
             {
-            system("cls");
+            clearScreen();
             size_t idx;
             int pilihanStatus;
             std::cout << "Masukkan index data yang ingin diupdate statusnya (mulai dari 1): ";
@@ -155,7 +161,7 @@ int main(){
             break;
         case '8':
             {
-            system("cls");
+            clearScreen();
             int pilihanStatus;
             std::cout << "Pilih status untuk menampilkan data:\n";
             std::cout << "1. Pending\n";
@@ -177,13 +183,13 @@ int main(){
             }
             break;
         case '0':
-            system("cls");
-            cout << "Keluar program.\n";
+            clearScreen();
+            std::cout << "Keluar program.\n";
             break;
         
         default:
-            system("cls");
-            cout<<"Pilihan Tidak Tersedia";
+            clearScreen();
+            std::cout<<"Pilihan Tidak Tersedia";
             getch();
             break;
         }
@@ -216,6 +222,7 @@ bool Queue::_isNull(){
     if(head == nullptr)
     {
         std::cerr << "Error: Require data not satisfied, abort function instead!" << std::endl;
+        getch();
         return true;
     }
     return false;
@@ -279,18 +286,21 @@ void Queue::_remove(const size_t index){
     */
 
     std::cerr << "Warning: Remove isn't a original function from Queue" << std::endl;
+    getch();
 
     if(_isNull())
     {
         return;
     }
-    else if(index == 0 || index > size())
+    else if(index == 0 || index >= size())
     {
         std::cerr << "Error: Unexpected behavior, use pop instead!" << std::endl;
+        getch();
         return;
     }
     
     Node *current = head;
+    
 
     for(size_t i = 1; i < index && current != nullptr; i++) // i dimulai dari satu karena current dimulai dari head
     {
@@ -324,6 +334,7 @@ void Queue::show(){
         std::cout << "nama: " << current->name << std::endl;
         std::cout << "No Telepon: " << current->phoneNum << std::endl;
         std::cout << "Deskripsi: " << current->desc << std::endl;
+        std::cout << "Status antri: " << statusMap[current->status] << std::endl;
         std::cout << "Waktu Antri: " << ctime(&current->time) << std::endl;
         current = current->next;
         ++i;
@@ -338,10 +349,12 @@ void Queue::_insert(const size_t index, const std::string &name, const int phone
     */
 
     std::cerr << "Warning: Insert isn't a original function from Queue" << std::endl;
+    getch();
 
-    if(index >= size() - 1 || head == nullptr)
+    if(index >= size() || head == nullptr)
     {
         std::cerr << "Error: Unexpected Behavior, Use push instead!" << std::endl;
+        getch();
         return;
     }
 
@@ -365,6 +378,13 @@ void Queue::_insert(const size_t index, const std::string &name, const int phone
 }
 
 void Queue::updateStatus(size_t index, Status newStatus) {
+    if (_isNull()) 
+    {
+        std::cerr << "Data Kosong" << std::endl;
+        getch();
+        return;
+    }
+
     Node* current = head;
     while (current != nullptr)
     {
@@ -377,17 +397,16 @@ void Queue::updateStatus(size_t index, Status newStatus) {
 }
 
 void Queue::showBasedOnStatus(Status status) {
-    if (_isNull()) {
+    if (_isNull()) 
+    {
+        std::cerr << "Data Kosong" << std::endl;
+        getch();
         return;
     }
 
     Node* current = head;
     size_t i = 1;
-    std::map<Status, std::string> statusMap = {
-        {PENDING, "Pending"},
-        {PROSES, "Proses"},
-        {SELESAI, "Selesai"},
-    };
+
 
     while (current != nullptr) {
         if (current->status == status) {
@@ -404,7 +423,7 @@ void Queue::showBasedOnStatus(Status status) {
 }
 
 void Queue::showmMenu() {
-    system("cls");
+    clearScreen();
     std::cout << "\n=== MENU QUEUE LINKED LIST ===\n";
     std::cout << "1. Tambah Data (Push)\n";
     std::cout << "2. Hapus Data Pertama (Pop)\n";

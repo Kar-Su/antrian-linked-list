@@ -5,13 +5,12 @@
 
 #ifdef _WIN32
     #include <conio.h>
+    #ifndef getch
+    #define getch() _getch()
+    #endif // !getch
     
     inline void clearScreen() { 
         system("cls"); 
-    }
-    
-    inline char getch() { 
-        return _getch(); 
     }
 
 #else
